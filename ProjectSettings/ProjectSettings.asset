@@ -1,0 +1,485 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!129 &1
+PlayerSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 26
+  productGUID: 5f34a8f4f3a7c4c9e8b5d7a2f1e6c3b4
+  AndroidProfiler: 0
+  AndroidFilterTouchesWhenObscured: 0
+  AndroidEnableSustainedPerformanceMode: 0
+  defaultScreenOrientation: 4
+  targetDevice: 2
+  useOnDemandResources: 0
+  accelerometerFrequency: 60
+  companyName: DefaultCompany
+  productName: MorseCodeGame
+  defaultCursor: {instanceID: 0}
+  cursorHotspot: {x: 0, y: 0}
+  m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
+  m_ShowUnitySplashScreen: 1
+  m_ShowUnitySplashLogo: 1
+  m_SplashScreenOverlayOpacity: 1
+  m_SplashScreenAnimation: 1
+  m_SplashScreenLogoStyle: 1
+  m_SplashScreenDrawMode: 0
+  m_SplashScreenBackgroundAnimationZoom: 1
+  m_SplashScreenLogoAnimationZoom: 1
+  m_SplashScreenBackgroundLandscapeAspect: 1
+  m_SplashScreenBackgroundPortraitAspect: 1
+  m_SplashScreenBackgroundLandscapeUvs:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  m_SplashScreenBackgroundPortraitUvs:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  m_SplashScreenLogos: []
+  m_VirtualRealitySplashScreen: {instanceID: 0}
+  m_HolographicTrackingLossScreen: {instanceID: 0}
+  defaultScreenWidth: 1920
+  defaultScreenHeight: 1080
+  defaultScreenWidthWeb: 960
+  defaultScreenHeightWeb: 600
+  m_StereoRenderingPath: 0
+  m_ActiveColorSpace: 1
+  m_SpriteBatchVertexThreshold: 300
+  m_MetroSupportUtf8: 1
+  m_MetroApplicationDescription: MorseCodeGame
+  wsaImages: {}
+  metroTileShortName: 
+  metroTileShowName: 0
+  metroMediumTileShowName: 0
+  metroLargeTileShowName: 0
+  metroWideTileShowName: 0
+  metroSupportStreamingInstall: 0
+  metroLastRequiredScene: 0
+  metroDefaultTileSize: 1
+  metroTileForegroundText: 2
+  metroTileBackgroundColor: {r: 0.13333334, g: 0.17254902, b: 0.21568628, a: 0}
+  metroSplashScreenBackgroundColor: {r: 0.12941177, g: 0.17254902, b: 0.21568628, a: 1}
+  metroSplashScreenUseBackgroundColor: 0
+  platformCapabilities: {}
+  metroTargetDeviceFamilies: {}
+  metroFTAName: 
+  metroFTAFileTypes: []
+  metroProtocolName: 
+  XboxOneProductId: 
+  XboxOneUpdateKey: 
+  XboxOneSandboxId: 
+  XboxOneContentId: 
+  XboxOneTitleId: 
+  XboxOneSCId: 
+  XboxOneGameOsOverridePath: 
+  XboxOnePackagingOverridePath: 
+  XboxOneAppManifestOverridePath: 
+  XboxOneVersion: 1.0.0.0
+  XboxOnePackageEncryption: 0
+  XboxOnePackageUpdateGranularity: 2
+  XboxOneDescription: 
+  XboxOneLanguage:
+    - enus
+  XboxOneCapability: []
+  XboxOneGameRating: {}
+  XboxOneIsContentPackage: 0
+  XboxOneEnableGPUVariability: 1
+  XboxOneSockets: {}
+  XboxOneSplashScreen: {instanceID: 0}
+  XboxOneAllowedProductIds: []
+  XboxOnePersistentLocalStorageSize: 0
+  XboxOneXTitleMemory: 8
+  XboxOneMonoScriptTypes: {}
+  XboxOneAllowedHtmlMetaTypes: 
+  XboxOneDisableKinectGpuReservation: 1
+  XboxOnePresentImmediateThreshold: 0
+  XboxOneTitleMemory: 8
+  XboxOneVideoMemory: 0
+  SwitchScreenResolutionBehavior: 2
+  SwitchNVNGraphicsFirmwareMemory: 32
+  SwitchMVKConfig: 
+  SwitchSocketMemoryPoolSize: 6144
+  SwitchSocketAllocatorPoolSize: 128
+  SwitchSocketConcurrencyLimit: 14
+  SwitchUseCPUProfiler: 0
+  SwitchUseFileSystemHandle: 0
+  SwitchHeapSize: 262144
+  SwitchNVNDefaultQueueSize: 524288
+  SwitchNVNGraphicsThreadMemory: 32
+  SwitchNVNGraphicsThreadMemoryPerFrame: 32
+  SwitchNVNVsyncInterval: 1
+  SwitchNVNMaxNumSubmissionsPerFrame: 2
+  SwitchNVNGraphicsDeviceMemory: -1
+  SwitchNVNComputeDeviceMemory: -1
+  SwitchNVNMaxNumBufferedFrames: 2
+  SwitchNVNMaxNumDeferredDraws: 128
+  SwitchNVNMaxNumDeferredDispatches: 16
+  SwitchNVNMaxNumDeferredCopies: 16
+  SwitchNVNShaderMemoryPoolSize: 67108864
+  SwitchNVNShaderMemoryPoolMargin: 33554432
+  SwitchNVNComputeMemoryPoolSize: 33554432
+  SwitchNVNComputeMemoryPoolMargin: 16777216
+  SwitchUseNewStyleFilepaths: 0
+  SwitchUseMicroSleepForYield: 1
+  SwitchEnableGOld: 0
+  SwitchAllowWebSocket: 0
+  SwitchQueueCommandMemory: 1048576
+  SwitchQueueControlMemory: 1048576
+  SwitchQueueComputeMemory: 33554432
+  SwitchQueueComputeControlMemory: 16384
+  SwitchNVNGraphicsFirmwareMemoryEnabled: 1
+  SwitchNVNQueueMemoryEnabled: 1
+  SwitchNVNGraphicsThreadMemoryEnabled: 1
+  SwitchNVNGraphicsThreadMemoryPerFrameEnabled: 1
+  SwitchNVNMaxNumSubmissionsPerFrameEnabled: 1
+  SwitchNVNMaxNumBufferedFramesEnabled: 1
+  SwitchNVNMaxNumDeferredDrawsEnabled: 1
+  SwitchNVNMaxNumDeferredDispatchesEnabled: 1
+  SwitchNVNMaxNumDeferredCopiesEnabled: 1
+  SwitchNVNShaderMemoryPoolSizeEnabled: 1
+  SwitchNVNShaderMemoryPoolMarginEnabled: 1
+  SwitchNVNComputeMemoryPoolSizeEnabled: 1
+  SwitchNVNComputeMemoryPoolMarginEnabled: 1
+  stadiaPresentMode: 0
+  stadiaTargetFramerate: 0
+  stadiaMaxResolution: 0
+  stadiaMaxBitrate: 0
+  stadiaEncoder: 0
+  stadiaEncoderProfile: 0
+  stadiaEncoderPreset: 0
+  stadiaEncoderBitrateMode: 0
+  stadiaEncoderAdaptiveResolutionEnabled: 0
+  stadiaEncoderAdaptiveResolutionEnabledPerQuality: []
+  stadiaEncoderResolutionScale: 0
+  stadiaEncoderEnableFieldCapping: 0
+  stadiaEncoderMaxQp: 0
+  stadiaEncoderMinQp: 0
+  stadiaEncoderInitialQp: 0
+  stadiaEncoderInitialScale: 0
+  stadiaEncoderMaxScale: 0
+  stadiaEncoderMinScale: 0
+  stadiaEncoderMaxFps: 0
+  stadiaEncoderMinFps: 0
+  stadiaEncoderInitialFps: 0
+  stadiaEncoderDeblockMode: 0
+  stadiaEncoderMotionVectorMode: 0
+  stadiaEncoderDirtyRectMode: 0
+  stadiaEncoderTemporalLayerCount: 0
+  stadiaEncoderSpatialLayerCount: 0
+  stadiaEncoderAdaptiveQuantizationMode: 0
+  stadiaEncoderAdaptiveQuantizationStrength: 0
+  stadiaEncoderRateControlMode: 0
+  stadiaEncoderFillerDataEnabled: 0
+  stadiaEncoderFrameInjectionEnabled: 0
+  stadiaEncoderFrameInjectionFrequency: 0
+  stadiaEncoderFrameInjectionInsertionMode: 0
+  stadiaEncoderFrameInjectionFrameType: 0
+  stadiaEncoderHrdEnabled: 0
+  stadiaEncoderHrdInitialDelay: 0
+  stadiaEncoderHrdBufferSize: 0
+  stadiaEncoderHrdTargetBitrate: 0
+  stadiaEncoderHrdMaxBitrate: 0
+  stadiaEncoderHrdMinBitrate: 0
+  stadiaEncoderHrdMaxQp: 0
+  stadiaEncoderHrdMinQp: 0
+  stadiaEncoderHrdInitialQp: 0
+  stadiaEncoderHrdTargetBitrateMode: 0
+  stadiaEncoderHrdBufferSizeMode: 0
+  stadiaEncoderHrdInitialDelayMode: 0
+  stadiaEncoderHrdMaxBitrateMode: 0
+  stadiaEncoderHrdMinBitrateMode: 0
+  stadiaEncoderHrdMaxQpMode: 0
+  stadiaEncoderHrdMinQpMode: 0
+  stadiaEncoderHrdInitialQpMode: 0
+  stadiaEncoderHrdTargetBitratePerQuality: []
+  stadiaEncoderHrdBufferSizePerQuality: []
+  stadiaEncoderHrdInitialDelayPerQuality: []
+  stadiaEncoderHrdMaxBitratePerQuality: []
+  stadiaEncoderHrdMinBitratePerQuality: []
+  stadiaEncoderHrdMaxQpPerQuality: []
+  stadiaEncoderHrdMinQpPerQuality: []
+  stadiaEncoderHrdInitialQpPerQuality: []
+  stadiaEncoderHrdTargetBitrateModePerQuality: []
+  stadiaEncoderHrdBufferSizeModePerQuality: []
+  stadiaEncoderHrdInitialDelayModePerQuality: []
+  stadiaEncoderHrdMaxBitrateModePerQuality: []
+  stadiaEncoderHrdMinBitrateModePerQuality: []
+  stadiaEncoderHrdMaxQpModePerQuality: []
+  stadiaEncoderHrdMinQpModePerQuality: []
+  stadiaEncoderHrdInitialQpModePerQuality: []
+  stadiaEncoderHrdTargetBitrateEnabled: 0
+  stadiaEncoderHrdBufferSizeEnabled: 0
+  stadiaEncoderHrdInitialDelayEnabled: 0
+  stadiaEncoderHrdMaxBitrateEnabled: 0
+  stadiaEncoderHrdMinBitrateEnabled: 0
+  stadiaEncoderHrdMaxQpEnabled: 0
+  stadiaEncoderHrdMinQpEnabled: 0
+  stadiaEncoderHrdInitialQpEnabled: 0
+  stadiaEncoderHrdTargetBitrateModeEnabled: 0
+  stadiaEncoderHrdBufferSizeModeEnabled: 0
+  stadiaEncoderHrdInitialDelayModeEnabled: 0
+  stadiaEncoderHrdMaxBitrateModeEnabled: 0
+  stadiaEncoderHrdMinBitrateModeEnabled: 0
+  stadiaEncoderHrdMaxQpModeEnabled: 0
+  stadiaEncoderHrdMinQpModeEnabled: 0
+  stadiaEncoderHrdInitialQpModeEnabled: 0
+  stadiaEncoderHrdTargetBitratePerQualityEnabled: []
+  stadiaEncoderHrdBufferSizePerQualityEnabled: []
+  stadiaEncoderHrdInitialDelayPerQualityEnabled: []
+  stadiaEncoderHrdMaxBitratePerQualityEnabled: []
+  stadiaEncoderHrdMinBitratePerQualityEnabled: []
+  stadiaEncoderHrdMaxQpPerQualityEnabled: []
+  stadiaEncoderHrdMinQpPerQualityEnabled: []
+  stadiaEncoderHrdInitialQpPerQualityEnabled: []
+  stadiaEncoderHrdTargetBitrateModePerQualityEnabled: []
+  stadiaEncoderHrdBufferSizeModePerQualityEnabled: []
+  stadiaEncoderHrdInitialDelayModePerQualityEnabled: []
+  stadiaEncoderHrdMaxBitrateModePerQualityEnabled: []
+  stadiaEncoderHrdMinBitrateModePerQualityEnabled: []
+  stadiaEncoderHrdMaxQpModePerQualityEnabled: []
+  stadiaEncoderHrdMinQpModePerQualityEnabled: []
+  stadiaEncoderHrdInitialQpModePerQualityEnabled: []
+  cloudStreamingResolutionScale: 0
+  cloudStreamingMaxResolution: 0
+  cloudStreamingEnableGic: 0
+  cloudStreamingGicMode: 0
+  cloudStreamingGicThreshold: 0
+  cloudStreamingGicMaxFps: 0
+  cloudStreamingGicMinFps: 0
+  cloudStreamingGicInitialFps: 0
+  cloudStreamingGicMaxResolution: 0
+  cloudStreamingGicMinResolution: 0
+  cloudStreamingGicInitialResolution: 0
+  cloudStreamingGicResolutionScale: 0
+  cloudStreamingGicThresholdPerQuality: []
+  cloudStreamingGicMaxFpsPerQuality: []
+  cloudStreamingGicMinFpsPerQuality: []
+  cloudStreamingGicInitialFpsPerQuality: []
+  cloudStreamingGicMaxResolutionPerQuality: []
+  cloudStreamingGicMinResolutionPerQuality: []
+  cloudStreamingGicInitialResolutionPerQuality: []
+  cloudStreamingGicResolutionScalePerQuality: []
+  cloudStreamingGicThresholdEnabled: 0
+  cloudStreamingGicMaxFpsEnabled: 0
+  cloudStreamingGicMinFpsEnabled: 0
+  cloudStreamingGicInitialFpsEnabled: 0
+  cloudStreamingGicMaxResolutionEnabled: 0
+  cloudStreamingGicMinResolutionEnabled: 0
+  cloudStreamingGicInitialResolutionEnabled: 0
+  cloudStreamingGicResolutionScaleEnabled: 0
+  cloudStreamingGicThresholdPerQualityEnabled: []
+  cloudStreamingGicMaxFpsPerQualityEnabled: []
+  cloudStreamingGicMinFpsPerQualityEnabled: []
+  cloudStreamingGicInitialFpsPerQualityEnabled: []
+  cloudStreamingGicMaxResolutionPerQualityEnabled: []
+  cloudStreamingGicMinResolutionPerQualityEnabled: []
+  cloudStreamingGicInitialResolutionPerQualityEnabled: []
+  cloudStreamingGicResolutionScalePerQualityEnabled: []
+  ps4NPAgeRating: 12
+  ps4NPTitleSecret: 
+  ps4NPTrophyPackPath: 
+  ps4NPIconPath: 
+  ps4NPParamsPath: 
+  ps4NPCommunicationsId: 
+  ps4NPCommsPassphrase: 
+  ps4NPSaveDataQuotaMax: 102400
+  ps4NPSaveDataQuotaMaxB: 102400
+  ps4NPSaveDataQuotaMaxKB: 102400
+  ps4NPSaveDataQuotaMaxMB: 102400
+  ps4NPSaveDataQuotaMaxGB: 102400
+  ps4NPSaveDataQuotaMaxTB: 102400
+  ps4NPBOOTMSGPath: 
+  ps4NPRichPresencePath: 
+  ps4NPBackgroundImagePath: 
+  ps4NPServerClientId: 
+  ps4NPServerClientSecret: 
+  ps4NPServerRedirectUri: 
+  ps4NPServerScope: 
+  ps4NPServerAuthCode: 
+  ps4NPServerToken: 
+  ps4NPServerTokenSecret: 
+  ps4NPServerRefreshToken: 
+  ps4NPServerRefreshTokenSecret: 
+  ps4NPServerTokenExpiry: 
+  ps4NPServerRefreshTokenExpiry: 
+  ps4NPServerTokenExpiryDate: 
+  ps4NPServerRefreshTokenExpiryDate: 
+  ps4NPServerTokenExpiryDateEnabled: 0
+  ps4NPServerRefreshTokenExpiryDateEnabled: 0
+  ps4NPServerTokenExpiryEnabled: 0
+  ps4NPServerRefreshTokenExpiryEnabled: 0
+  ps4NPServerAuthCodeEnabled: 0
+  ps4NPServerTokenEnabled: 0
+  ps4NPServerTokenSecretEnabled: 0
+  ps4NPServerRefreshTokenEnabled: 0
+  ps4NPServerRefreshTokenSecretEnabled: 0
+  ps4NPServerScopeEnabled: 0
+  ps4NPServerRedirectUriEnabled: 0
+  ps4NPServerClientSecretEnabled: 0
+  ps4NPServerClientIdEnabled: 0
+  ps4NPBackgroundImagePathEnabled: 0
+  ps4NPRichPresencePathEnabled: 0
+  ps4NPBOOTMSGPathEnabled: 0
+  ps4NPParamsPathEnabled: 0
+  ps4NPIconPathEnabled: 0
+  ps4NPTrophyPackPathEnabled: 0
+  ps4NPCommunicationsIdEnabled: 0
+  ps4NPCommsPassphraseEnabled: 0
+  ps4NPSaveDataQuotaMaxEnabled: 0
+  ps4NPSaveDataQuotaMaxBEnabled: 0
+  ps4NPSaveDataQuotaMaxKBEnabled: 0
+  ps4NPSaveDataQuotaMaxMBEnabled: 0
+  ps4NPSaveDataQuotaMaxGBEnabled: 0
+  ps4NPSaveDataQuotaMaxTBEnabled: 0
+  ps4NPTitleSecretEnabled: 0
+  ps4NPAgeRatingEnabled: 0
+  ps4TrophiesPath: 
+  ps4TrophiesPathEnabled: 0
+  ps4Package: 
+  ps4PackageEnabled: 0
+  ps4PatchPkgPath: 
+  ps4PatchPkgPathEnabled: 0
+  ps4PatchLatestPkgPath: 
+  ps4PatchLatestPkgPathEnabled: 0
+  ps4PatchChangeinfoPath: 
+  ps4PatchChangeinfoPathEnabled: 0
+  ps4PatchChangeinfoPathOld: 
+  ps4PatchChangeinfoPathOldEnabled: 0
+  ps4PatchPasscode: 
+  ps4PatchPasscodeEnabled: 0
+  ps4ParamSfxPath: 
+  ps4ParamSfxPathEnabled: 0
+  ps4ShareFilePath: 
+  ps4ShareFilePathEnabled: 0
+  ps4ShareFileSize: 
+  ps4ShareFileSizeEnabled: 0
+  ps4PronunciationSigPath: 
+  ps4PronunciationSigPathEnabled: 0
+  ps4PronunciationXmlPath: 
+  ps4PronunciationXmlPathEnabled: 0
+  ps4PronunciationSigPathOld: 
+  ps4PronunciationSigPathOldEnabled: 0
+  ps4PronunciationXmlPathOld: 
+  ps4PronunciationXmlPathOldEnabled: 0
+  ps4BackgroundImagePath: 
+  ps4BackgroundImagePathEnabled: 0
+  ps4StartupImagePath: 
+  ps4StartupImagePathEnabled: 0
+  ps4SaveDataImagePath: 
+  ps4SaveDataImagePathEnabled: 0
+  ps4SdkOverride: 
+  ps4SdkOverrideEnabled: 0
+  ps4BGMPath: 
+  ps4BGMPathEnabled: 0
+  ps4ShareCommandPath: 
+  ps4ShareCommandPathEnabled: 0
+  ps4ShareVideoPath: 
+  ps4ShareVideoPathEnabled: 0
+  ps4IncludedModules: []
+  ps4IncludedModulesEnabled: []
+  ps4EnablePlayerPrefsSupport: 1
+  ps4EnablePlayerPrefsSupportEnabled: 1
+  ps4UseResolutionFallback: 0
+  ps4UseResolutionFallbackEnabled: 0
+  ps4ReprojectionKind: 0
+  ps4ReprojectionKindEnabled: 0
+  ps4UseAudio3dBackend: 0
+  ps4UseAudio3dBackendEnabled: 0
+  ps4SocialScreenEnabled: 0
+  ps4SocialScreenEnabledEnabled: 0
+  ps4ScriptOptimizationLevel: 0
+  ps4ScriptOptimizationLevelEnabled: 0
+  ps4Audio3dVirtualSpeakerCount: 0
+  ps4Audio3dVirtualSpeakerCountEnabled: 0
+  ps4attribCpuUsage: 0
+  ps4attribCpuUsageEnabled: 0
+  ps4PatchPkgMagic: 
+  ps4PatchPkgMagicEnabled: 0
+  ps4ShareOverlayImagePath: 
+  ps4ShareOverlayImagePathEnabled: 0
+  ps4PrivacyGuardImagePath: 
+  ps4PrivacyGuardImagePathEnabled: 0
+  ps4cnGalaxySubType: 0
+  ps4cnGalaxySubTypeEnabled: 0
+  ps4cnProjectId: 
+  ps4cnProjectIdEnabled: 0
+  ps4cnSonyProductId: 
+  ps4cnSonyProductIdEnabled: 0
+  ps4cnSandboxId: 
+  ps4cnSandboxIdEnabled: 0
+  ps4cnClientSecret: 
+  ps4cnClientSecretEnabled: 0
+  ps4cnPasscode: 
+  ps4cnPasscodeEnabled: 0
+  ps4cnEnv: 
+  ps4cnEnvEnabled: 0
+  playerPrefsSupport: 0
+  playerPrefsSupportEnabled: 0
+  il2cppCompilerConfiguration: {}
+  il2cppCompilerConfigurationEnabled: {}
+  il2cppCodegenEnabled: []
+  il2cppCodegenEnabledEnabled: []
+  il2cppCompilationCacheEnabled: 0
+  il2cppCompilationCacheEnabledEnabled: 0
+  il2cppCompilationCachePath: 
+  il2cppCompilationCachePathEnabled: 0
+  il2cppStatsDumpDir: 
+  il2cppStatsDumpDirEnabled: 0
+  cloudEnabled: 0
+  cloudEnabledEnabled: 0
+  cloudProjectId: 
+  cloudProjectIdEnabled: 0
+  cloudOrganizationId: 
+  cloudOrganizationIdEnabled: 0
+  cloudEndpoint: 
+  cloudEndpointEnabled: 0
+  facebookSdkVersion: 7.9.4
+  facebookSdkVersionEnabled: 1
+  facebookAppId: 
+  facebookAppIdEnabled: 0
+  facebookCookies: 1
+  facebookCookiesEnabled: 1
+  facebookLogging: 1
+  facebookLoggingEnabled: 1
+  facebookStatus: 1
+  facebookStatusEnabled: 1
+  facebookXfbml: 0
+  facebookXfbmlEnabled: 0
+  facebookFrictionlessRequests: 1
+  facebookFrictionlessRequestsEnabled: 1
+  apiCompatibilityLevel: 6
+  apiCompatibilityLevelPerPlatform: {}
+  cloudProjectId: 
+  cloudProjectIdEnabled: 0
+  framebufferDepthMemorylessMode: 0
+  framebufferDepthMemorylessModeEnabled: 0
+  volumeFrameworkUpdateMode: 0
+  volumeFrameworkUpdateModeEnabled: 0
+  qnxAudioMode: 0
+  qnxAudioModeEnabled: 0
+  editorBuildSettings:
+    Standalone:
+      scriptingBackend: 0
+      il2cppCompilerConfiguration: 0
+    WebGL:
+      scriptingBackend: 1
+      il2cppCompilerConfiguration: 0
+  playerBuildSettings:
+    Standalone:
+      scriptingBackend: 0
+      il2cppCompilerConfiguration: 0
+    WebGL:
+      scriptingBackend: 1
+      il2cppCompilerConfiguration: 0
+  selectedPlatform: 0
+  selectedPlatformEditorSettings:
+    Standalone:
+      scriptingBackend: 0
+      il2cppCompilerConfiguration: 0
+    WebGL:
+      scriptingBackend: 1
+      il2cppCompilerConfiguration: 0

@@ -19,12 +19,14 @@ namespace MorseCodeGame
         
         [Tooltip("音频音量")]
         [Range(0f, 1f)]
-        public float volume = 0.5f;
+        public float volume = 0.8f;
         
         [Header("参考数据")]
         public MorseCodeData morseData;
         
         private AudioSource _audioSource;
+        private AudioClip _dotClip;
+        private AudioClip _dashClip;
         private bool _isPlaying = false;
         
         // 事件
@@ -39,7 +41,58 @@ namespace MorseCodeGame
             {
                 _audioSource = gameObject.AddComponent<AudioSource>();
             }
+            
+            // 配置 AudioSource
+            _audioSource.playOnAwake = false;
             _audioSource.volume = volume;
+            _audioSource.spatialBlend = 0f; // 2D音效
+            
+            // 预生成音频片段
+            GenerateClips();
+        }
+        
+        private void OnValidate()
+        {
+            if (_audioSource != null)
+            {
+                _audioSource.volume = volume;
+            }
+        }
+        
+        /// <summary>
+        /// 预生成点和划的音频片段
+        /// </summary>
+        private void GenerateClips()
+        {
+            _dotClip = CreateToneClip(dotDuration);
+            _dashClip = CreateToneClip(dotDuration * 3);
+        }
+        
+        /// <summary>
+        /// 创建正弦波音效片段
+        /// </summary>
+        private AudioClip CreateToneClip(float duration)
+        {
+            int sampleRate = 44100;
+            int sampleLength = (int)(sampleRate * duration);
+            float[] samples = new float[sampleLength];
+            
+            // 生成正弦波，添加淡入淡出避免爆音
+            for (int i = 0; i < sampleLength; i++)
+            {
+                float t = (float)i / sampleRate;
+                float sine = Mathf.Sin(2 * Mathf.PI * frequency * t);
+                
+                // 淡入淡出窗口（各5%）
+                float fadeIn = Mathf.Clamp01(i / (sampleLength * 0.05f));
+                float fadeOut = Mathf.Clamp01((sampleLength - i) / (sampleLength * 0.05f));
+                
+                samples[i] = sine * fadeIn * fadeOut * 0.9f; // 0.9f 防止削波
+            }
+            
+            AudioClip clip = AudioClip.Create($"MorseTone_{duration:F3}s", sampleLength, 1, sampleRate, false);
+            clip.SetData(samples, 0);
+            return clip;
         }
         
         /// <summary>
@@ -86,13 +139,13 @@ namespace MorseCodeGame
                 if (symbol == '·' || symbol == '.')
                 {
                     OnSymbolPlay?.Invoke('·');
-                    yield return PlayTone(dotDuration);
+                    yield return PlayTone(_dotClip);
                     yield return new WaitForSeconds(dotDuration); // 符号间间隔
                 }
                 else if (symbol == '-' || symbol == '—')
                 {
                     OnSymbolPlay?.Invoke('-');
-                    yield return PlayTone(dotDuration * 3); // 划是点的3倍
+                    yield return PlayTone(_dashClip);
                     yield return new WaitForSeconds(dotDuration); // 符号间间隔
                 }
                 else if (symbol == ' ')
@@ -131,23 +184,15 @@ namespace MorseCodeGame
             OnPlaybackEnd?.Invoke();
         }
         
-        private IEnumerator PlayTone(float duration)
+        private IEnumerator PlayTone(AudioClip clip)
         {
-            // 生成正弦波音效
-            int sampleRate = 44100;
-            int sampleLength = (int)(sampleRate * duration);
-            float[] samples = new float[sampleLength];
+            if (clip == null || _audioSource == null) yield break;
             
-            for (int i = 0; i < sampleLength; i++)
-            {
-                samples[i] = Mathf.Sin(2 * Mathf.PI * frequency * i / sampleRate);
-            }
+            _audioSource.clip = clip;
+            _audioSource.Play();
             
-            AudioClip toneClip = AudioClip.Create("MorseTone", sampleLength, 1, sampleRate, false);
-            toneClip.SetData(samples, 0);
-            
-            _audioSource.PlayOneShot(toneClip, volume);
-            yield return new WaitForSeconds(duration);
+            // 等待音频播放完成
+            yield return new WaitForSeconds(clip.length);
         }
         
         /// <summary>
@@ -161,8 +206,29 @@ namespace MorseCodeGame
         public void Stop()
         {
             StopAllCoroutines();
-            _audioSource.Stop();
+            if (_audioSource != null)
+            {
+                _audioSource.Stop();
+            }
             _isPlaying = false;
+        }
+        
+        /// <summary>
+        /// 测试播放一个点（调试用）
+        /// </summary>
+        [ContextMenu("Test Play Dot")]
+        private void TestPlayDot()
+        {
+            if (_dotClip != null)
+            {
+                _audioSource.clip = _dotClip;
+                _audioSource.Play();
+                Debug.Log("Playing dot sound");
+            }
+            else
+            {
+                Debug.LogError("Dot clip not generated!");
+            }
         }
     }
 }

@@ -414,8 +414,6 @@ namespace MorseCodeGame
             _currentMessage = null;
         }
 
-        #endregion
-
         #region Test Methods
         
         [ContextMenu("Test Play Dot")]

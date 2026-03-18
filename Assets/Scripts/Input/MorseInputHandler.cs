@@ -21,6 +21,12 @@ namespace MorseCodeGame
         public bool useKeyboard = true;
         public KeyCode inputKey = KeyCode.Space;
         
+        [Header("音频反馈")]
+        [Tooltip("输入时播放音频的播放器，为空则不播放")]
+        public MorseAudioPlayer audioPlayer;
+        [Tooltip("是否在输入时播放音效")]
+        public bool playSoundOnInput = true;
+        
         // 事件
         public event Action OnDotInput;      // 点输入
         public event Action OnDashInput;     // 划输入
@@ -71,6 +77,10 @@ namespace MorseCodeGame
             {
                 // 点 (·)
                 _currentInput += "·";
+                if (playSoundOnInput && audioPlayer != null)
+                {
+                    audioPlayer.PlayMorseCode("·");
+                }
                 OnDotInput?.Invoke();
                 OnMorseInput?.Invoke(_currentInput);
             }
@@ -78,6 +88,10 @@ namespace MorseCodeGame
             {
                 // 划 (-)
                 _currentInput += "-";
+                if (playSoundOnInput && audioPlayer != null)
+                {
+                    audioPlayer.PlayMorseCode("-");
+                }
                 OnDashInput?.Invoke();
                 OnMorseInput?.Invoke(_currentInput);
             }

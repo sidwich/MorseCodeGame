@@ -35,6 +35,12 @@ namespace MorseCodeGame
                 audioPlayer.morseData = morseData;
             }
             
+            // 关联音频播放器到输入处理器，提供输入反馈音效
+            if (inputHandler != null && audioPlayer != null)
+            {
+                inputHandler.audioPlayer = audioPlayer;
+            }
+            
             // 绑定按钮事件
             if (playButton != null)
             {

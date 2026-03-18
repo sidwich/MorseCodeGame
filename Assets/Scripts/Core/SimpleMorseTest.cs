@@ -30,6 +30,14 @@ namespace MorseCodeGame
         
         private void SetupUI()
         {
+            // 创建EventSystem（UI点击必需）
+            if (UnityEngine.EventSystems.EventSystem.current == null)
+            {
+                GameObject eventSystemGO = new GameObject("EventSystem");
+                eventSystemGO.AddComponent<UnityEngine.EventSystems.EventSystem>();
+                eventSystemGO.AddComponent<UnityEngine.EventSystems.StandaloneInputModule>();
+            }
+            
             // 创建Canvas
             GameObject canvasGO = new GameObject("Canvas");
             Canvas canvas = canvasGO.AddComponent<Canvas>();

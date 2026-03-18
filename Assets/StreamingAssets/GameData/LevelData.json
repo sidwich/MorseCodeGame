@@ -1,14 +1,16 @@
 {
-    "version": "1.0",
+    "version": "1.1",
     "levels": [
         {
             "levelId": "LEVEL_001",
             "levelName": "紧急求救",
-            "description": "学习基础求救信号",
+            "description": "学习基础求救信号，听电码输入明文",
+            "levelType": "ListenDecode",
             "messages": [
                 {
                     "messageId": "MSG_001_SOS",
                     "text": "SOS",
+                    "answer": "SOS",
                     "description": "国际求救信号",
                     "delayBefore": 0.5,
                     "isMorseCode": false
@@ -16,6 +18,7 @@
                 {
                     "messageId": "MSG_002_HELP",
                     "text": "HELP",
+                    "answer": "HELP",
                     "description": "求助信号",
                     "delayBefore": 0.5,
                     "isMorseCode": false
@@ -23,6 +26,7 @@
                 {
                     "messageId": "MSG_003_MAYDAY",
                     "text": "MAYDAY",
+                    "answer": "MAYDAY",
                     "description": "无线电求救",
                     "delayBefore": 0.5,
                     "isMorseCode": false
@@ -30,6 +34,7 @@
                 {
                     "messageId": "MSG_004_RESCUE",
                     "text": "RESCUE",
+                    "answer": "RESCUE",
                     "description": "需要救援",
                     "delayBefore": 0.5,
                     "isMorseCode": false
@@ -38,41 +43,31 @@
         },
         {
             "levelId": "LEVEL_002",
-            "levelName": "方位指引",
-            "description": "方位和位置相关信号",
+            "levelName": "电码输入",
+            "description": "听明文输入对应的摩斯电码",
+            "levelType": "InputMorse",
             "messages": [
                 {
-                    "messageId": "MSG_101_NORTH",
-                    "text": "NORTH",
-                    "description": "北方",
+                    "messageId": "MSG_101_SOS",
+                    "text": "SOS",
+                    "answer": "··· --- ···",
+                    "description": "输入SOS的电码",
                     "delayBefore": 0.5,
                     "isMorseCode": false
                 },
                 {
-                    "messageId": "MSG_102_SOUTH",
-                    "text": "SOUTH",
-                    "description": "南方",
+                    "messageId": "MSG_102_HELP",
+                    "text": "HELP",
+                    "answer": "···· · ·-·· ·--·",
+                    "description": "输入HELP的电码",
                     "delayBefore": 0.5,
                     "isMorseCode": false
                 },
                 {
-                    "messageId": "MSG_103_EAST",
-                    "text": "EAST",
-                    "description": "东方",
-                    "delayBefore": 0.5,
-                    "isMorseCode": false
-                },
-                {
-                    "messageId": "MSG_104_WEST",
-                    "text": "WEST",
-                    "description": "西方",
-                    "delayBefore": 0.5,
-                    "isMorseCode": false
-                },
-                {
-                    "messageId": "MSG_105_LOCATION",
-                    "text": "LOCATION",
-                    "description": "位置",
+                    "messageId": "MSG_103_HI",
+                    "text": "HI",
+                    "answer": "···· ··",
+                    "description": "输入HI的电码",
                     "delayBefore": 0.5,
                     "isMorseCode": false
                 }
@@ -80,34 +75,39 @@
         },
         {
             "levelId": "LEVEL_003",
-            "levelName": "数字编码",
-            "description": "数字和数量相关",
+            "levelName": "方位指引",
+            "description": "方位和位置相关信号",
+            "levelType": "ListenDecode",
             "messages": [
                 {
-                    "messageId": "MSG_201_ONE",
-                    "text": "1",
-                    "description": "数字一",
-                    "delayBefore": 0.3,
+                    "messageId": "MSG_201_NORTH",
+                    "text": "NORTH",
+                    "answer": "NORTH",
+                    "description": "北方",
+                    "delayBefore": 0.5,
                     "isMorseCode": false
                 },
                 {
-                    "messageId": "MSG_202_FIVE",
-                    "text": "5",
-                    "description": "数字五",
-                    "delayBefore": 0.3,
+                    "messageId": "MSG_202_SOUTH",
+                    "text": "SOUTH",
+                    "answer": "SOUTH",
+                    "description": "南方",
+                    "delayBefore": 0.5,
                     "isMorseCode": false
                 },
                 {
-                    "messageId": "MSG_203_TEN",
-                    "text": "10",
-                    "description": "数字十",
-                    "delayBefore": 0.3,
+                    "messageId": "MSG_203_EAST",
+                    "text": "EAST",
+                    "answer": "EAST",
+                    "description": "东方",
+                    "delayBefore": 0.5,
                     "isMorseCode": false
                 },
                 {
-                    "messageId": "MSG_204_COUNT",
-                    "text": "COUNT",
-                    "description": "计数",
+                    "messageId": "MSG_204_WEST",
+                    "text": "WEST",
+                    "answer": "WEST",
+                    "description": "西方",
                     "delayBefore": 0.5,
                     "isMorseCode": false
                 }

@@ -5,26 +5,31 @@ using System.Collections.Generic;
 namespace MorseCodeGame
 {
     /// <summary>
-    /// 简单的摩斯电码测试场景控制器
-    /// 支持关卡消息系统
+    /// 摩斯电码测试场景控制器
+    /// 支持关卡消息系统和答案验证
     /// </summary>
     public class SimpleMorseTest : MonoBehaviour
     {
-        [Header("组件")]
+        [Header("Components")]
         public MorseAudioPlayer audioPlayer;
         public MorseInputHandler inputHandler;
         public MorseCodeData morseData;
         public MessageDatabase messageDatabase;
+        public InputRecorder inputRecorder;
         
         private Text statusText;
         private Text inputText;
         private Text resultText;
         private Text levelInfoText;
+        private Text promptText;
         private Image progressImage;
         private Transform canvasTransform;
+        private InputField textInputField;
         
         private List<Button> messageButtons = new List<Button>();
         private int currentLevelIndex = 0;
+        private LevelData currentLevel;
+        private MessageData currentMessage;
         
         private void Start()
         {
@@ -32,12 +37,12 @@ namespace MorseCodeGame
             SetupComponents();
             BindEvents();
             
-            ShowMessage("摩斯电码测试\n点击按钮输入\n短按=· 长按=-");
+            ShowMessage("Morse Code Game\nSelect a level to start");
         }
         
         private void SetupUI()
         {
-            // 创建EventSystem（UI点击必需）
+            // Create EventSystem
             if (UnityEngine.EventSystems.EventSystem.current == null)
             {
                 GameObject eventSystemGO = new GameObject("EventSystem");
@@ -45,7 +50,7 @@ namespace MorseCodeGame
                 eventSystemGO.AddComponent<UnityEngine.EventSystems.StandaloneInputModule>();
             }
             
-            // 创建Canvas
+            // Create Canvas
             GameObject canvasGO = new GameObject("Canvas");
             canvasTransform = canvasGO.transform;
             Canvas canvas = canvasGO.AddComponent<Canvas>();
@@ -53,67 +58,62 @@ namespace MorseCodeGame
             canvasGO.AddComponent<CanvasScaler>();
             canvasGO.AddComponent<GraphicRaycaster>();
             
-            // 创建状态文本
-            GameObject statusGO = CreateText(canvasTransform, "StatusText", "摩斯电码测试", 0, 350, 30);
+            // Status text
+            GameObject statusGO = CreateText(canvasTransform, "StatusText", "Morse Code Game", 0, 380, 28);
             statusText = statusGO.GetComponent<Text>();
             
-            // 创建关卡信息文本
-            GameObject levelInfoGO = CreateText(canvasTransform, "LevelInfoText", "", 0, 300, 20);
+            // Level info
+            GameObject levelInfoGO = CreateText(canvasTransform, "LevelInfoText", "", 0, 330, 18);
             levelInfoText = levelInfoGO.GetComponent<Text>();
             levelInfoText.color = Color.cyan;
             
-            // 创建输入显示文本
-            GameObject inputGO = CreateText(canvasTransform, "InputText", "", 0, 150, 40);
+            // Prompt text (what player should do)
+            GameObject promptGO = CreateText(canvasTransform, "PromptText", "", 0, 280, 20);
+            promptText = promptGO.GetComponent<Text>();
+            promptText.color = Color.yellow;
+            
+            // Input display
+            GameObject inputGO = CreateText(canvasTransform, "InputText", "", 0, 180, 36);
             inputText = inputGO.GetComponent<Text>();
-            inputText.color = Color.yellow;
+            inputText.color = Color.green;
             
-            // 创建结果文本
-            GameObject resultGO = CreateText(canvasTransform, "ResultText", "", 0, 80, 24);
+            // Result text
+            GameObject resultGO = CreateText(canvasTransform, "ResultText", "", 0, 120, 22);
             resultText = resultGO.GetComponent<Text>();
-            resultText.color = Color.green;
+            resultText.color = Color.white;
             
-            // 创建进度条
+            // Progress bar
             CreateProgressBar(canvasTransform);
             
-            // 创建输入按钮
-            GameObject inputBtnGO = CreateButton(canvasTransform, "InputButton", "按住输入", 0, 0);
+            // Morse input button (for InputMorse mode)
+            GameObject inputBtnGO = CreateButton(canvasTransform, "InputButton", "Hold to Input", 0, 20);
             Button inputBtn = inputBtnGO.GetComponent<Button>();
             MorseInputButton inputBtnComp = inputBtnGO.AddComponent<MorseInputButton>();
             inputBtnComp.handler = inputHandler;
             
-            // 创建播放控制按钮行
-            CreatePlaybackControls(canvasTransform);
+            // Text input field (for ListenDecode mode)
+            CreateTextInputField(canvasTransform);
             
-            // 创建关卡切换按钮
+            // Control buttons
+            CreateControlButtons(canvasTransform);
+            
+            // Level switch buttons
             CreateLevelSwitchButtons(canvasTransform);
             
-            // 创建消息列表区域
+            // Message list
             CreateMessageList(canvasTransform);
-            
-            // 创建清空按钮
-            GameObject clearBtnGO = CreateButton(canvasTransform, "ClearButton", "清空", 200, -250, 100, 40);
-            Button clearBtn = clearBtnGO.GetComponent<Button>();
-            clearBtn.onClick.AddListener(() => {
-                if (inputHandler != null) {
-                    inputHandler.ClearInput();
-                    UpdateInputDisplay("");
-                    ShowResult("");
-                }
-            });
         }
         
         private void CreateProgressBar(Transform parent)
         {
-            // 进度条背景
             GameObject progressBG = new GameObject("ProgressBG");
             progressBG.transform.SetParent(parent);
             RectTransform bgRect = progressBG.AddComponent<RectTransform>();
-            bgRect.anchoredPosition = new Vector2(0, 50);
+            bgRect.anchoredPosition = new Vector2(0, 70);
             bgRect.sizeDelta = new Vector2(202, 22);
             Image bgImg = progressBG.AddComponent<Image>();
             bgImg.color = Color.gray;
             
-            // 进度条
             GameObject progressGO = new GameObject("ProgressBar");
             progressGO.transform.SetParent(progressBG.transform);
             RectTransform progressRect = progressGO.AddComponent<RectTransform>();
@@ -126,73 +126,185 @@ namespace MorseCodeGame
             progressImage.fillAmount = 0;
         }
         
-        private void CreatePlaybackControls(Transform parent)
+        private void CreateTextInputField(Transform parent)
         {
-            // 播放当前消息按钮
-            GameObject playCurrentBtnGO = CreateButton(parent, "PlayCurrentBtn", "播放当前", -200, -100, 100, 40);
-            Button playCurrentBtn = playCurrentBtnGO.GetComponent<Button>();
-            playCurrentBtn.onClick.AddListener(() => {
-                if (audioPlayer != null) {
-                    audioPlayer.PlayCurrentMessage();
-                }
-            });
+            // Container
+            GameObject container = new GameObject("TextInputContainer");
+            container.transform.SetParent(parent);
+            RectTransform containerRect = container.AddComponent<RectTransform>();
+            containerRect.anchoredPosition = new Vector2(0, -30);
+            containerRect.sizeDelta = new Vector2(300, 60);
             
-            // 播放下一条按钮
-            GameObject playNextBtnGO = CreateButton(parent, "PlayNextBtn", "下一条", -50, -100, 100, 40);
-            Button playNextBtn = playNextBtnGO.GetComponent<Button>();
-            playNextBtn.onClick.AddListener(() => {
-                if (audioPlayer != null) {
-                    audioPlayer.PlayNextMessage();
-                }
-            });
+            // Background
+            Image bg = container.AddComponent<Image>();
+            bg.color = new Color(0.1f, 0.1f, 0.1f, 0.8f);
             
-            // 随机播放按钮
-            GameObject playRandomBtnGO = CreateButton(parent, "PlayRandomBtn", "随机", 100, -100, 100, 40);
-            Button playRandomBtn = playRandomBtnGO.GetComponent<Button>();
-            playRandomBtn.onClick.AddListener(() => {
-                if (audioPlayer != null) {
-                    audioPlayer.PlayRandomMessage();
-                }
-            });
+            // Input field
+            GameObject inputGO = new GameObject("TextInput");
+            inputGO.transform.SetParent(container.transform);
+            RectTransform inputRect = inputGO.AddComponent<RectTransform>();
+            inputRect.anchoredPosition = Vector2.zero;
+            inputRect.sizeDelta = new Vector2(280, 40);
+            
+            textInputField = inputGO.AddComponent<InputField>();
+            
+            // Create text component for input field
+            GameObject textGO = CreateText(inputGO.transform, "Text", "", 0, 0, 20);
+            textInputField.textComponent = textGO.GetComponent<Text>();
+            textInputField.textComponent.color = Color.white;
+            textInputField.textComponent.alignment = TextAnchor.MiddleCenter;
+            
+            // Placeholder
+            GameObject placeholderGO = CreateText(inputGO.transform, "Placeholder", "Enter answer...", 0, 0, 18);
+            Text placeholderText = placeholderGO.GetComponent<Text>();
+            placeholderText.color = new Color(0.5f, 0.5f, 0.5f);
+            textInputField.placeholder = placeholderText;
+            
+            // Initially hidden
+            container.SetActive(false);
+        }
+        
+        private void CreateControlButtons(Transform parent)
+        {
+            // Submit button
+            GameObject submitBtnGO = CreateButton(parent, "SubmitBtn", "Submit", -150, -100, 120, 45);
+            Button submitBtn = submitBtnGO.GetComponent<Button>();
+            submitBtn.onClick.AddListener(OnSubmitClick);
+            
+            // Play message button
+            GameObject playBtnGO = CreateButton(parent, "PlayBtn", "Play", 0, -100, 120, 45);
+            Button playBtn = playBtnGO.GetComponent<Button>();
+            playBtn.onClick.AddListener(OnPlayCurrentMessage);
+            
+            // Clear button
+            GameObject clearBtnGO = CreateButton(parent, "ClearBtn", "Clear", 150, -100, 120, 45);
+            Button clearBtn = clearBtnGO.GetComponent<Button>();
+            clearBtn.onClick.AddListener(OnClearClick);
+            
+            // Next message button
+            GameObject nextBtnGO = CreateButton(parent, "NextBtn", "Next Message", 200, -160, 140, 40);
+            Button nextBtn = nextBtnGO.GetComponent<Button>();
+            nextBtn.onClick.AddListener(OnNextMessage);
         }
         
         private void CreateLevelSwitchButtons(Transform parent)
         {
-            // 上一关按钮
-            GameObject prevLevelBtnGO = CreateButton(parent, "PrevLevelBtn", "上一关", -250, -160, 80, 40);
-            Button prevLevelBtn = prevLevelBtnGO.GetComponent<Button>();
-            prevLevelBtn.onClick.AddListener(() => SwitchLevel(-1));
+            GameObject prevBtnGO = CreateButton(parent, "PrevLevelBtn", "Previous", -250, -160, 100, 40);
+            Button prevBtn = prevBtnGO.GetComponent<Button>();
+            prevBtn.onClick.AddListener(() => SwitchLevel(-1));
             
-            // 关卡名称显示
-            GameObject levelNameGO = CreateText(parent, "LevelNameText", "关卡 1", -130, -160, 18);
-            levelNameGO.GetComponent<RectTransform>().sizeDelta = new Vector2(150, 40);
-            
-            // 下一关按钮
-            GameObject nextLevelBtnGO = CreateButton(parent, "NextLevelBtn", "下一关", -30, -160, 80, 40);
-            Button nextLevelBtn = nextLevelBtnGO.GetComponent<Button>();
-            nextLevelBtn.onClick.AddListener(() => SwitchLevel(1));
+            GameObject nextBtnGO = CreateButton(parent, "NextLevelBtn", "Next", -100, -160, 100, 40);
+            Button nextBtn = nextBtnGO.GetComponent<Button>();
+            nextBtn.onClick.AddListener(() => SwitchLevel(1));
         }
         
         private void CreateMessageList(Transform parent)
         {
-            // 消息列表标题
-            GameObject listTitleGO = CreateText(parent, "ListTitle", "消息列表", 180, -100, 18);
+            GameObject listTitleGO = CreateText(parent, "ListTitle", "Messages", 250, -20, 18);
             listTitleGO.GetComponent<RectTransform>().sizeDelta = new Vector2(150, 30);
             
-            // 创建可滚动区域（简化版，先创建几个固定按钮）
-            float startY = -140;
+            float startY = -60;
             float spacing = 45;
             
             for (int i = 0; i < 5; i++)
             {
                 int index = i;
-                GameObject msgBtnGO = CreateButton(parent, $"MsgBtn_{i}", $"消息 {i + 1}", 180, startY - i * spacing, 140, 40);
+                GameObject msgBtnGO = CreateButton(parent, $"MsgBtn_{i}", $"Msg {i + 1}", 250, startY - i * spacing, 140, 40);
                 Button msgBtn = msgBtnGO.GetComponent<Button>();
-                msgBtn.onClick.AddListener(() => PlayMessageByIndex(index));
+                msgBtn.onClick.AddListener(() => SelectMessage(index));
                 messageButtons.Add(msgBtn);
-                
-                // 初始隐藏
                 msgBtnGO.SetActive(false);
+            }
+        }
+        
+        private void OnSubmitClick()
+        {
+            if (currentLevel == null || currentMessage == null) return;
+            
+            if (currentLevel.levelType == LevelType.InputMorse)
+            {
+                // Submit morse code input
+                inputRecorder.SubmitMorseInput();
+            }
+            else
+            {
+                // Submit text input
+                if (textInputField != null)
+                {
+                    inputRecorder.SubmitTextInput(textInputField.text);
+                    textInputField.text = "";
+                }
+            }
+        }
+        
+        private void OnPlayCurrentMessage()
+        {
+            if (currentMessage != null)
+            {
+                audioPlayer.PlayMessageByIndex(GetCurrentMessageIndex());
+            }
+        }
+        
+        private void OnClearClick()
+        {
+            inputHandler?.ClearInput();
+            if (textInputField != null) textInputField.text = "";
+            UpdateInputDisplay("");
+            ShowResult("");
+        }
+        
+        private void OnNextMessage()
+        {
+            if (currentLevel == null) return;
+            
+            int nextIndex = GetCurrentMessageIndex() + 1;
+            if (nextIndex < currentLevel.messages.Count)
+            {
+                SelectMessage(nextIndex);
+            }
+            else
+            {
+                // Level complete
+                EndLevel();
+            }
+        }
+        
+        private int GetCurrentMessageIndex()
+        {
+            if (currentLevel?.messages == null) return 0;
+            return currentLevel.messages.FindIndex(m => m.messageId == currentMessage?.messageId);
+        }
+        
+        private void SelectMessage(int index)
+        {
+            if (currentLevel?.messages == null) return;
+            if (index < 0 || index >= currentLevel.messages.Count) return;
+            
+            currentMessage = currentLevel.messages[index];
+            
+            // Prepare recorder
+            string answer = currentMessage.GetAnswer();
+            inputRecorder.PrepareForMessage(currentMessage.messageId, answer);
+            
+            // Update UI
+            UpdatePromptText();
+            ShowMessage($"Selected: {currentMessage.description}");
+            
+            // Auto play
+            audioPlayer.PlayMessageByIndex(index);
+        }
+        
+        private void UpdatePromptText()
+        {
+            if (currentLevel == null || currentMessage == null) return;
+            
+            if (currentLevel.levelType == LevelType.InputMorse)
+            {
+                promptText.text = $"Listen: '{currentMessage.text}'\nInput the Morse code";
+            }
+            else
+            {
+                promptText.text = $"Listen to the Morse code\nEnter what you heard";
             }
         }
         
@@ -204,33 +316,64 @@ namespace MorseCodeGame
             if (levels.Count == 0) return;
             
             currentLevelIndex = Mathf.Clamp(currentLevelIndex + delta, 0, levels.Count - 1);
-            var level = levels[currentLevelIndex];
+            StartLevel(levels[currentLevelIndex]);
+        }
+        
+        private void StartLevel(LevelData level)
+        {
+            currentLevel = level;
             
-            // 设置音频播放器关卡
+            // Set audio player level
             if (audioPlayer != null)
             {
                 audioPlayer.SetLevel(level.levelId);
             }
             
-            // 更新UI
+            // Start recording
+            inputRecorder.StartLevel(level.levelId);
+            
+            // Update UI
             UpdateLevelInfo(level);
             UpdateMessageButtons(level);
+            UpdateInputMode(level.levelType);
             
-            ShowMessage($"切换到: {level.levelName}");
+            // Auto select first message
+            if (level.messages.Count > 0)
+            {
+                SelectMessage(0);
+            }
+            
+            ShowMessage($"Level: {level.levelName}");
+        }
+        
+        private void EndLevel()
+        {
+            var result = inputRecorder.EndLevel();
+            inputRecorder.SaveLevelResult(result);
+            
+            ShowMessage($"Level Complete! Accuracy: {result.accuracy:P0} Stars: {result.starRating}");
+            ShowResult($"Correct: {result.correctCount}/{result.totalCount}\nTime: {result.totalTime:F1}s");
+        }
+        
+        private void UpdateInputMode(LevelType type)
+        {
+            // Show/hide input methods based on level type
+            GameObject morseInput = GameObject.Find("InputButton");
+            GameObject textInput = GameObject.Find("TextInputContainer");
+            
+            if (morseInput != null)
+                morseInput.SetActive(type == LevelType.InputMorse);
+            
+            if (textInput != null)
+                textInput.SetActive(type == LevelType.ListenDecode);
         }
         
         private void UpdateLevelInfo(LevelData level)
         {
             if (levelInfoText != null)
             {
-                levelInfoText.text = $"[{level.levelId}] {level.levelName}\n{level.description}";
-            }
-            
-            // 更新关卡名称按钮文本
-            var levelNameText = GameObject.Find("LevelNameText")?.GetComponent<Text>();
-            if (levelNameText != null)
-            {
-                levelNameText.text = level.levelName;
+                string typeText = level.levelType == LevelType.InputMorse ? "[Input Morse]" : "[Listen & Decode]";
+                levelInfoText.text = $"{typeText} {level.levelName}\n{level.description}";
             }
         }
         
@@ -254,14 +397,6 @@ namespace MorseCodeGame
                 {
                     messageButtons[i].gameObject.SetActive(false);
                 }
-            }
-        }
-        
-        private void PlayMessageByIndex(int index)
-        {
-            if (audioPlayer != null)
-            {
-                audioPlayer.PlayMessageByIndex(index);
             }
         }
         
@@ -307,7 +442,7 @@ namespace MorseCodeGame
         
         private void SetupComponents()
         {
-            // 创建或获取 MessageDatabase
+            // MessageDatabase
             if (messageDatabase == null)
             {
                 var existingDB = FindObjectOfType<MessageDatabase>();
@@ -322,27 +457,48 @@ namespace MorseCodeGame
                 }
             }
             
-            // 创建音频播放器
+            // InputRecorder
+            if (inputRecorder == null)
+            {
+                var existingRecorder = FindObjectOfType<InputRecorder>();
+                if (existingRecorder != null)
+                {
+                    inputRecorder = existingRecorder;
+                }
+                else
+                {
+                    GameObject recorderGO = new GameObject("InputRecorder");
+                    inputRecorder = recorderGO.AddComponent<InputRecorder>();
+                }
+            }
+            
+            // AudioPlayer
             if (audioPlayer == null)
             {
                 GameObject audioGO = new GameObject("MorseAudioPlayer");
                 audioPlayer = audioGO.AddComponent<MorseAudioPlayer>();
             }
             
-            // 创建输入处理器
+            // InputHandler
             if (inputHandler == null)
             {
                 GameObject inputGO = new GameObject("MorseInputHandler");
                 inputHandler = inputGO.AddComponent<MorseInputHandler>();
             }
             
-            // 关联音频播放器到输入处理器
+            // Connect references
             if (inputHandler != null && audioPlayer != null)
             {
                 inputHandler.audioPlayer = audioPlayer;
             }
             
-            // 创建数据
+            if (inputRecorder != null)
+            {
+                inputRecorder.inputHandler = inputHandler;
+                inputRecorder.audioPlayer = audioPlayer;
+                inputRecorder.morseData = morseData;
+            }
+            
             if (morseData == null)
             {
                 morseData = ScriptableObject.CreateInstance<MorseCodeData>();
@@ -353,45 +509,51 @@ namespace MorseCodeGame
         
         private void BindEvents()
         {
-            // 等待数据库加载完成
             if (messageDatabase != null)
             {
-                messageDatabase.OnDataLoaded += OnDatabaseLoaded;
-                messageDatabase.OnLoadError += (error) => {
-                    ShowMessage($"数据加载失败: {error}");
-                };
+                messageDatabase.OnDataLoaded += () => SwitchLevel(0);
             }
             
             if (inputHandler != null)
             {
-                inputHandler.OnDotInput += () => ShowMessage("输入: 点(·)");
-                inputHandler.OnDashInput += () => ShowMessage("输入: 划(-)");
+                inputHandler.OnDotInput += () => UpdateInputDisplay(inputHandler.GetCurrentInput());
+                inputHandler.OnDashInput += () => UpdateInputDisplay(inputHandler.GetCurrentInput());
                 inputHandler.OnMorseInput += (code) => UpdateInputDisplay(code);
-                inputHandler.OnCharacterSubmit += (code) => {
-                    char? ch = morseData.GetCharacter(code);
-                    string result = ch.HasValue ? $"解码: {ch.Value}" : "未知";
-                    ShowResult($"[{code}] = {result}");
-                    UpdateInputDisplay("");
-                };
+            }
+            
+            if (inputRecorder != null)
+            {
+                inputRecorder.OnAnswerCorrect += OnAnswerCorrect;
+                inputRecorder.OnAnswerWrong += OnAnswerWrong;
             }
             
             if (audioPlayer != null)
             {
-                audioPlayer.OnPlaybackStart += () => ShowMessage("正在播放...");
-                audioPlayer.OnPlaybackEnd += () => ShowMessage("播放完成");
-                audioPlayer.OnMessageStart += (msg) => ShowMessage($"播放: {msg.description}");
+                audioPlayer.OnPlaybackStart += () => ShowMessage("Playing...");
+                audioPlayer.OnPlaybackEnd += () => ShowMessage("Playback complete");
             }
         }
         
-        private void OnDatabaseLoaded()
+        private void OnAnswerCorrect(InputRecord record)
         {
-            // 数据库加载完成，初始化第一关
-            SwitchLevel(0);
+            ShowMessage("Correct!");
+            ShowResult($"Right! '{record.playerInput}' = '{record.correctAnswer}'");
+            inputHandler?.ClearInput();
+            
+            // Auto advance after delay
+            Invoke(nameof(OnNextMessage), 1.5f);
+        }
+        
+        private void OnAnswerWrong(InputRecord record)
+            
+        {
+            ShowMessage("Wrong! Try again");
+            ShowResult($"Your input: '{record.playerInput}'\nCorrect: '{record.correctAnswer}'");
         }
         
         private void Update()
         {
-            // 更新进度条
+            // Update progress bar
             if (progressImage != null && inputHandler != null && inputHandler.IsPressed)
             {
                 float progress = inputHandler.GetCurrentPressDuration() / inputHandler.dashThreshold;
@@ -424,9 +586,6 @@ namespace MorseCodeGame
         }
     }
     
-    /// <summary>
-    /// 按钮输入桥接器
-    /// </summary>
     public class MorseInputButton : MonoBehaviour, UnityEngine.EventSystems.IPointerDownHandler, UnityEngine.EventSystems.IPointerUpHandler
     {
         public MorseInputHandler handler;

@@ -1,11 +1,13 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MorseCodeGame
 {
     /// <summary>
     /// 摩斯电码音频播放器
-    /// 使用预制音频文件播放摩斯电码
+    /// 使用预制音频文件播放摩斯电码，支持关卡消息系统
     /// </summary>
     public class MorseAudioPlayer : MonoBehaviour
     {
@@ -30,13 +32,27 @@ namespace MorseCodeGame
         [Header("参考数据")]
         public MorseCodeData morseData;
         
+        [Header("关卡消息")]
+        [Tooltip("当前关卡ID")]
+        public string currentLevelId = "LEVEL_001";
+        
+        [Tooltip("消息播放模式")]
+        public PlayMode playMode = PlayMode.Sequential;
+        
         private AudioSource _audioSource;
         private bool _isPlaying = false;
+        
+        // 关卡播放状态
+        private int _currentMessageIndex = 0;
+        private List<int> _shuffleQueue = new List<int>();
+        private MessageData _currentMessage = null;
         
         // 事件
         public System.Action OnPlaybackStart;
         public System.Action OnPlaybackEnd;
-        public System.Action<char> OnSymbolPlay; // 正在播放的符号(·或-)
+        public System.Action<char> OnSymbolPlay;
+        public System.Action<MessageData> OnMessageStart;
+        public System.Action<MessageData> OnMessageEnd;
         
         private void Awake()
         {
@@ -46,10 +62,9 @@ namespace MorseCodeGame
                 _audioSource = gameObject.AddComponent<AudioSource>();
             }
             
-            // 配置 AudioSource
             _audioSource.playOnAwake = false;
             _audioSource.volume = volume;
-            _audioSource.spatialBlend = 0f; // 2D音效
+            _audioSource.spatialBlend = 0f;
         }
         
         private void OnValidate()
@@ -59,7 +74,9 @@ namespace MorseCodeGame
                 _audioSource.volume = volume;
             }
         }
-        
+
+        #region 基础播放接口
+
         /// <summary>
         /// 播放单个字符的摩斯电码
         /// </summary>
@@ -75,7 +92,7 @@ namespace MorseCodeGame
         }
         
         /// <summary>
-        /// 播放摩斯码字符串(如 "·-")
+        /// 播放摩斯码字符串
         /// </summary>
         public void PlayMorseCode(string morseCode)
         {
@@ -86,13 +103,208 @@ namespace MorseCodeGame
         }
         
         /// <summary>
-        /// 播放文本（自动转换为摩斯码）
+        /// 播放文本
         /// </summary>
         public void PlayText(string text)
         {
             if (string.IsNullOrEmpty(text) || morseData == null) return;
             StartCoroutine(PlayTextSequence(text));
         }
+
+        #endregion
+
+        #region 关卡消息播放接口
+
+        /// <summary>
+        /// 设置当前关卡
+        /// </summary>
+        public void SetLevel(string levelId)
+        {
+            currentLevelId = levelId;
+            _currentMessageIndex = 0;
+            _shuffleQueue.Clear();
+            Debug.Log($"[MorseAudioPlayer] 切换到关卡: {levelId}");
+        }
+        
+        /// <summary>
+        /// 设置播放模式
+        /// </summary>
+        public void SetPlayMode(PlayMode mode)
+        {
+            playMode = mode;
+            if (mode == PlayMode.Shuffle)
+            {
+                BuildShuffleQueue();
+            }
+        }
+        
+        /// <summary>
+        /// 播放指定消息
+        /// </summary>
+        public void PlayMessage(string messageId)
+        {
+            if (MessageDatabase.Instance == null)
+            {
+                Debug.LogWarning("[MorseAudioPlayer] MessageDatabase 未初始化");
+                return;
+            }
+            
+            var message = MessageDatabase.Instance.GetMessage(currentLevelId, messageId);
+            if (message != null)
+            {
+                PlayMessageData(message);
+            }
+            else
+            {
+                Debug.LogWarning($"[MorseAudioPlayer] 消息未找到: {messageId}");
+            }
+        }
+        
+        /// <summary>
+        /// 播放指定索引的消息
+        /// </summary>
+        public void PlayMessageByIndex(int index)
+        {
+            if (MessageDatabase.Instance == null) return;
+            
+            var message = MessageDatabase.Instance.GetMessageByIndex(currentLevelId, index);
+            if (message != null)
+            {
+                _currentMessageIndex = index;
+                PlayMessageData(message);
+            }
+        }
+        
+        /// <summary>
+        /// 播放下一条消息（根据播放模式）
+        /// </summary>
+        public void PlayNextMessage()
+        {
+            if (MessageDatabase.Instance == null) return;
+            
+            var messages = MessageDatabase.Instance.GetLevelMessages(currentLevelId);
+            if (messages.Count == 0) return;
+            
+            MessageData message = null;
+            
+            switch (playMode)
+            {
+                case PlayMode.Sequential:
+                    _currentMessageIndex = (_currentMessageIndex + 1) % messages.Count;
+                    message = messages[_currentMessageIndex];
+                    break;
+                    
+                case PlayMode.Random:
+                    _currentMessageIndex = Random.Range(0, messages.Count);
+                    message = messages[_currentMessageIndex];
+                    break;
+                    
+                case PlayMode.Repeat:
+                    message = messages[_currentMessageIndex];
+                    break;
+                    
+                case PlayMode.Shuffle:
+                    if (_shuffleQueue.Count == 0)
+                    {
+                        BuildShuffleQueue();
+                    }
+                    if (_shuffleQueue.Count > 0)
+                    {
+                        _currentMessageIndex = _shuffleQueue[0];
+                        _shuffleQueue.RemoveAt(0);
+                        message = messages[_currentMessageIndex];
+                    }
+                    break;
+            }
+            
+            if (message != null)
+            {
+                PlayMessageData(message);
+            }
+        }
+        
+        /// <summary>
+        /// 播放当前消息
+        /// </summary>
+        public void PlayCurrentMessage()
+        {
+            PlayMessageByIndex(_currentMessageIndex);
+        }
+        
+        /// <summary>
+        /// 播放随机消息
+        /// </summary>
+        public void PlayRandomMessage()
+        {
+            if (MessageDatabase.Instance == null) return;
+            
+            var message = MessageDatabase.Instance.GetRandomMessage(currentLevelId);
+            if (message != null)
+            {
+                PlayMessageData(message);
+            }
+        }
+        
+        /// <summary>
+        /// 获取当前消息信息
+        /// </summary>
+        public MessageData GetCurrentMessage() => _currentMessage;
+        
+        /// <summary>
+        /// 获取当前关卡所有消息
+        /// </summary>
+        public List<MessageData> GetCurrentLevelMessages()
+        {
+            if (MessageDatabase.Instance == null) return new List<MessageData>();
+            return MessageDatabase.Instance.GetLevelMessages(currentLevelId);
+        }
+
+        #endregion
+
+        #region 私有方法
+
+        private void PlayMessageData(MessageData message)
+        {
+            if (message == null) return;
+            
+            _currentMessage = message;
+            Stop();
+            StartCoroutine(PlayMessageCoroutine(message));
+        }
+        
+        private IEnumerator PlayMessageCoroutine(MessageData message)
+        {
+            OnMessageStart?.Invoke(message);
+            
+            // 延迟
+            if (message.delayBefore > 0)
+            {
+                yield return new WaitForSeconds(message.delayBefore);
+            }
+            
+            // 播放
+            if (message.isMorseCode)
+            {
+                yield return StartCoroutine(PlayCodeSequence(message.text));
+            }
+            else
+            {
+                yield return StartCoroutine(PlayTextSequence(message.text));
+            }
+            
+            OnMessageEnd?.Invoke(message);
+        }
+        
+        private void BuildShuffleQueue()
+        {
+            _shuffleQueue.Clear();
+            if (MessageDatabase.Instance == null) return;
+            
+            var messages = MessageDatabase.Instance.GetLevelMessages(currentLevelId);
+            _shuffleQueue = Enumerable.Range(0, messages.Count).OrderBy(x => Random.value).ToList();
+        }
+
+        #endregion
         
         private IEnumerator PlayCodeSequence(string code)
         {
@@ -192,8 +404,20 @@ namespace MorseCodeGame
         }
         
         /// <summary>
-        /// 测试播放点音频
+        /// 重置播放状态
         /// </summary>
+        public void Reset()
+        {
+            Stop();
+            _currentMessageIndex = 0;
+            _shuffleQueue.Clear();
+            _currentMessage = null;
+        }
+
+        #endregion
+
+        #region 测试方法
+        
         [ContextMenu("Test Play Dot")]
         private void TestPlayDot()
         {
@@ -209,9 +433,6 @@ namespace MorseCodeGame
             }
         }
         
-        /// <summary>
-        /// 测试播放划音频
-        /// </summary>
         [ContextMenu("Test Play Dash")]
         private void TestPlayDash()
         {
@@ -226,5 +447,13 @@ namespace MorseCodeGame
                 Debug.LogWarning("Dash audio clip not assigned!");
             }
         }
+        
+        [ContextMenu("Test Play Current Level")]
+        private void TestPlayCurrentLevel()
+        {
+            PlayCurrentMessage();
+        }
+
+        #endregion
     }
 }

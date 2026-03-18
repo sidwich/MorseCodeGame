@@ -1,0 +1,117 @@
+{
+    "version": "1.0",
+    "levels": [
+        {
+            "levelId": "LEVEL_001",
+            "levelName": "紧急求救",
+            "description": "学习基础求救信号",
+            "messages": [
+                {
+                    "messageId": "MSG_001_SOS",
+                    "text": "SOS",
+                    "description": "国际求救信号",
+                    "delayBefore": 0.5,
+                    "isMorseCode": false
+                },
+                {
+                    "messageId": "MSG_002_HELP",
+                    "text": "HELP",
+                    "description": "求助信号",
+                    "delayBefore": 0.5,
+                    "isMorseCode": false
+                },
+                {
+                    "messageId": "MSG_003_MAYDAY",
+                    "text": "MAYDAY",
+                    "description": "无线电求救",
+                    "delayBefore": 0.5,
+                    "isMorseCode": false
+                },
+                {
+                    "messageId": "MSG_004_RESCUE",
+                    "text": "RESCUE",
+                    "description": "需要救援",
+                    "delayBefore": 0.5,
+                    "isMorseCode": false
+                }
+            ]
+        },
+        {
+            "levelId": "LEVEL_002",
+            "levelName": "方位指引",
+            "description": "方位和位置相关信号",
+            "messages": [
+                {
+                    "messageId": "MSG_101_NORTH",
+                    "text": "NORTH",
+                    "description": "北方",
+                    "delayBefore": 0.5,
+                    "isMorseCode": false
+                },
+                {
+                    "messageId": "MSG_102_SOUTH",
+                    "text": "SOUTH",
+                    "description": "南方",
+                    "delayBefore": 0.5,
+                    "isMorseCode": false
+                },
+                {
+                    "messageId": "MSG_103_EAST",
+                    "text": "EAST",
+                    "description": "东方",
+                    "delayBefore": 0.5,
+                    "isMorseCode": false
+                },
+                {
+                    "messageId": "MSG_104_WEST",
+                    "text": "WEST",
+                    "description": "西方",
+                    "delayBefore": 0.5,
+                    "isMorseCode": false
+                },
+                {
+                    "messageId": "MSG_105_LOCATION",
+                    "text": "LOCATION",
+                    "description": "位置",
+                    "delayBefore": 0.5,
+                    "isMorseCode": false
+                }
+            ]
+        },
+        {
+            "levelId": "LEVEL_003",
+            "levelName": "数字编码",
+            "description": "数字和数量相关",
+            "messages": [
+                {
+                    "messageId": "MSG_201_ONE",
+                    "text": "1",
+                    "description": "数字一",
+                    "delayBefore": 0.3,
+                    "isMorseCode": false
+                },
+                {
+                    "messageId": "MSG_202_FIVE",
+                    "text": "5",
+                    "description": "数字五",
+                    "delayBefore": 0.3,
+                    "isMorseCode": false
+                },
+                {
+                    "messageId": "MSG_203_TEN",
+                    "text": "10",
+                    "description": "数字十",
+                    "delayBefore": 0.3,
+                    "isMorseCode": false
+                },
+                {
+                    "messageId": "MSG_204_COUNT",
+                    "text": "COUNT",
+                    "description": "计数",
+                    "delayBefore": 0.5,
+                    "isMorseCode": false
+                }
+            ]
+        }
+    ]
+}

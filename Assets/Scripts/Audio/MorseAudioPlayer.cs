@@ -75,7 +75,7 @@ namespace MorseCodeGame
             }
         }
 
-        #region 基础播放接口
+        #region Basic Playback
 
         /// <summary>
         /// 播放单个字符的摩斯电码
@@ -113,7 +113,7 @@ namespace MorseCodeGame
 
         #endregion
 
-        #region 关卡消息播放接口
+        #region Level Message Playback
 
         /// <summary>
         /// 设置当前关卡
@@ -261,7 +261,7 @@ namespace MorseCodeGame
 
         #endregion
 
-        #region 私有方法
+        #region Private Methods
 
         private void PlayMessageData(MessageData message)
         {
@@ -416,7 +416,7 @@ namespace MorseCodeGame
 
         #endregion
 
-        #region 测试方法
+        #region Test Methods
         
         [ContextMenu("Test Play Dot")]
         private void TestPlayDot()
